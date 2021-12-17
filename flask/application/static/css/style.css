@@ -357,6 +357,10 @@ header a, footer a {
   color: #f96424;
 }
 
+.fa-github {
+  color: #000;
+}
+
 
 header a:hover, footer a:hover {
   font-size: 110%;
