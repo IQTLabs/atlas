@@ -1,0 +1,1 @@
+ALTER TABLE atlas.layouts ALTER COLUMN randomize SET DEFAULT FALSE;

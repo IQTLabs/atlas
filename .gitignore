@@ -1,0 +1,17 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+
+.env
+
+venv
+
+__pycache__/
+
+.vscode/
+
+.idea
+
+flask/.run/
+
+flask/application/dashapp/assets/screenshots/

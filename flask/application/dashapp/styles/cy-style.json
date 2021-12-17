@@ -1,0 +1,176 @@
+[
+  {
+    "selector": "node",
+    "style": {
+      "height": "data(size)",
+      "width": "data(size)",
+      "background-color": "data(color)",
+      "label": "data(label)",
+      "color": "#130047",
+      "opacity": 0.9,
+      "text-justification": "left",
+      "text-margin-x": ".25em",
+      "font-size": "data(fontSize)",
+      "font-weight": 500,
+      "font-family": "Assistant-SemiBold, sans-serif",
+      "line-height": "1.25em",
+      "text-wrap": "wrap"
+    }
+  },
+  {
+    "selector": "edge",
+    "style": {
+      "width": 3,
+      "opacity": 0.666,
+      "line-color": "#888"
+    }
+  },
+  {
+    "selector": "edge.bezier",
+    "style": {
+      "curve-style": "bezier",
+      "control-point-step-size": 40
+    }
+  }, {
+    "selector": "edge.unbundled-bezier",
+    "style": {
+      "curve-style": "unbundled-bezier",
+      "control-point-distances": 120,
+      "control-point-weights": 0.1
+    }
+  }, {
+    "selector": "edge.multi-unbundled-bezier",
+    "style": {
+      "width": "data(width)",
+      "line-color": "data(color)",
+      "curve-style": "unbundled-bezier",
+      "control-point-weight": 0.5,
+      "control-point-step-size": 50
+    }
+  }, {
+    "selector": "edge.haystack",
+    "style": {
+      "curve-style": "haystack",
+      "haystack-radius": 0.5
+    }
+  }, {
+    "selector": "edge.segments",
+    "style": {
+      "curve-style": "segments",
+      "segment-distances": [ 40, -40 ],
+      "segment-weights": [0.250 , 0.75]
+    }
+  },
+  {
+    "selector": ".top-left",
+    "style": {
+      "text-valign": "top",
+      "text-halign": "left"
+    }
+  },
+
+  {
+    "selector": ".top-center",
+    "style": {
+      "text-valign": "top",
+      "text-halign": "center"
+    }
+  },
+
+  {
+    "selector": ".top-right",
+    "style": {
+      "text-valign": "top",
+      "text-halign": "right"
+    }
+  },
+
+  {
+    "selector": ".center-left",
+    "style": {
+      "text-valign": "center",
+      "text-halign": "left"
+    }
+  },
+
+  {
+    "selector": ".center-center",
+    "style": {
+      "text-valign": "center",
+      "text-halign": "center"
+    }
+  },
+
+  {
+    "selector": ".center-right",
+    "style": {
+      "text-valign": "center",
+      "text-halign": "right"
+    }
+  },
+
+  {
+    "selector": ".bottom-left",
+    "style": {
+      "text-valign": "bottom",
+      "text-halign": "left"
+    }
+  },
+
+  {
+    "selector": ".bottom-center",
+    "style": {
+      "text-valign": "bottom",
+      "text-halign": "center"
+    }
+  },
+
+  {
+    "selector": ".bottom-right",
+    "style": {
+      "text-valign": "bottom",
+      "text-halign": "right"
+    }
+  },
+
+  {
+    "selector": ".multiline-manual",
+    "style": {
+      "text-wrap": "wrap"
+    }
+  },
+
+  {
+    "selector": ".multiline-auto",
+    "style": {
+      "text-wrap": "wrap"
+    }
+  },
+
+  {
+    "selector": ".autorotate",
+    "style": {
+      "edge-text-rotation": "autorotate"
+    }
+  },
+
+  {
+    "selector": ".background",
+    "style": {
+      "text-background-opacity": 1,
+      "text-background-color": "#ccc",
+      "text-background-shape": "roundrectangle",
+      "text-border-color": "#000",
+      "text-border-width": 1,
+      "text-border-opacity": 1
+    }
+  },
+
+  {
+    "selector": ".outline",
+    "style": {
+      "text-outline-color": "#ccc",
+      "text-outline-width": 3
+    }
+  }
+]

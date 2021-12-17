@@ -1,0 +1,63 @@
+
+[
+  {
+    "selector": "#maintitle",
+    "style": {
+      "width": "100%",
+      "height": "72px",
+      "background-repeat": "no-repeat",
+      "margin-bottom": "50px"
+    }
+  },
+  {
+    "selector": "#maintitle h1",
+    "style": {
+      "display": "none"
+    }
+  },
+  {
+    "selector": "#mainpanel",
+    "style": {
+      "margin-top": "50px",
+      "margin-left": "25px",
+      "background": "#fff",
+      "background-color": "rgba(255, 255, 255, 0.8)",
+      "border": "1px solid #ccc",
+      "z-index": "20",
+      "position": "fixed",
+      "top": "0"
+    }
+  },
+  {
+    "selector": "#mainpanel .b1",
+    "style": {
+      "padding": "0px 0 0 0"
+    }
+  },
+  {
+    "selector": "#mainpanel .col",
+    "style": {
+      "width": "240px",
+      "padding": "18px 18px 18px 18px",
+      "margin": "0"
+    }
+  },
+  {
+    "selector": "#title",
+    "style": {
+      "font-weight": "bold"
+    }
+  },
+  {
+    "selector": "#titletext",
+    "style": {
+      "padding": "6px 0 10px 0"
+    }
+  },
+  {
+    "selector": "#info",
+    "style": {
+      "padding-bottom": "15px"
+    }
+  }
+]

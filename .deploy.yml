@@ -1,0 +1,59 @@
+---
+pointofcontact: "George Sieniawski"
+businessowner: "Ravi Pappu"
+release: "2020-03-03"
+retirement: "2099-01-01"  # Will be reviewed yearly
+datasensitivity: "private"  # Defaults to private. Can also be set to "public"
+description:  # This should be short and under 80chars per line
+  "Atlas is a visualization tool for creating customizable, 
+  interactive graphs in a browser using Python and Dash Cytoscape."
+
+services:
+  - hostname: "atlas.iqt.org"
+    ephermeral: yes # can these be recreated w/ code
+    healthcheck:
+      endpoint: "atlas.iqt.org"  # leave blank if healthcheck isn't needed
+      contents: "OK"
+      response: "200"
+      downtime: "5m"  # How long should it be down before alerting
+      failure_notification: "itdev@iqt.org"
+    intranetavailable: "yes"  # Will this need to be accessible internally
+    internetavailable: "no"  # Will this need to be accessible on the internet
+    ports:
+      - 8050
+  - hostname: ""
+    ephermeral: no # can these be recreated w/ code
+    healthcheck:
+      endpoint: ""  # leave blank if healthcheck isn't needed
+      contents: "OK"
+      response: "200"
+      downtime: "5m"  # How long should it be down before alerting
+      failure_notification: "itdev@iqt.org"
+    intranetavailable: "yes"  # Will this need to be accessible internally
+    internetavailable: "no"  # Will this need to be accessible on the internet
+    ports:
+      - 5432
+  - hostname: ""
+    ephermeral: no # can these be recreated w/ code
+    healthcheck:
+      endpoint: "/healthz"  # leave blank if healthcheck isn't needed
+      contents: "OK"
+      response: "200"
+      downtime: "5m"  # How long should it be down before alerting
+      failure_notification: "itdev@iqt.org"
+    intranetavailable: "yes"  # Will this need to be accessible internally
+    internetavailable: "no"  # Will this need to be accessible on the internet
+    ports:
+      - 8082
+
+location:
+  provider: "aws"
+  tenant: "example"
+machinesize: "t2.small"  # Can also define as "2cpu8gb"
+diskspace: "50gb"
+os: "ubuntu"
+ami: "ubuntu-ami-x86_54-example"  # leave blank if not using AWS
+backup:
+  snapshot: "true"
+  cadence: "24h"
+vlan: "9999"  # Netops will fill out

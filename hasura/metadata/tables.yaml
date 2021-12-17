@@ -1,0 +1,473 @@
+- table:
+    schema: atlas
+    name: authenticated_user_email
+  select_permissions:
+  - role: api-user
+    permission:
+      columns:
+      - email
+      filter: {}
+- table:
+    schema: atlas
+    name: data
+  configuration:
+    custom_root_fields:
+      insert_one: InsertDataOne
+      select_by_pk: DataByID
+      select: Data
+      update_by_pk: UpdateDataById
+    custom_column_names:
+      view_id: viewId
+      network_data: networkData
+      api_url: apiurl
+      updated_at: updatedAt
+      deleted_at: deletedAt
+      created_at: createdAt
+      query_object: queryObject
+      transformed_network_data: transformedNetworkData
+  object_relationships:
+  - name: view
+    using:
+      foreign_key_constraint_on: view_id
+  insert_permissions:
+  - role: api-user
+    permission:
+      check: {}
+      columns:
+      - api_url
+      - headers
+      - id
+      - location
+      - network_data
+      - query
+      - query_object
+      - source
+      - transformed_network_data
+      - view_id
+      backend_only: false
+  select_permissions:
+  - role: api-user
+    permission:
+      columns:
+      - api_url
+      - created_at
+      - deleted_at
+      - headers
+      - id
+      - location
+      - network_data
+      - query
+      - query_object
+      - source
+      - transformed_network_data
+      - updated_at
+      - view_id
+      filter: {}
+  update_permissions:
+  - role: api-user
+    permission:
+      columns:
+      - api_url
+      - headers
+      - location
+      - query
+      - query_object
+      - transformed_network_data
+      filter: {}
+      check: null
+- table:
+    schema: atlas
+    name: edges
+- table:
+    schema: atlas
+    name: layouts
+  configuration:
+    custom_root_fields:
+      insert_one: InsertLayoutsOne
+      select_by_pk: LayoutsByID
+      select: Layouts
+      update_by_pk: UpdateLayoutById
+    custom_column_names:
+      view_id: viewId
+      tiling_padding_vertical: tilingPaddingVertical
+      edge_elasticity: edgeElasticity
+      zooming_enabled: zoomingEnabled
+      gravity_compound: gravityCompound
+      num_iter: numIter
+      user_zooming_enabled: userZoomingEnabled
+      gravity_range: gravityRange
+      tiling_padding_horizontal: tilingPaddingHorizontal
+      animation_duration: animationDuration
+      updated_at: updatedAt
+      deleted_at: deletedAt
+      ideal_edge_length: idealEdgeLength
+      node_repulsion: nodeRepulsion
+      created_at: createdAt
+      node_dimensions_include_labels: nodeDimensionsIncludeLabels
+      user_panning_enabled: userPanningEnabled
+      gravity_range_compound: gravityRangeCompound
+      panning_enabled: panningEnabled
+      initial_energy_on_incremental: initialEnergyOnIncremental
+      nesting_factor: nestingFactor
+  object_relationships:
+  - name: view
+    using:
+      foreign_key_constraint_on: view_id
+  insert_permissions:
+  - role: api-user
+    permission:
+      check: {}
+      columns:
+      - animate
+      - animation_duration
+      - edge_elasticity
+      - fit
+      - gravity
+      - gravity_compound
+      - gravity_range
+      - gravity_range_compound
+      - id
+      - ideal_edge_length
+      - initial_energy_on_incremental
+      - name
+      - nesting_factor
+      - node_dimensions_include_labels
+      - node_repulsion
+      - num_iter
+      - padding
+      - panning_enabled
+      - quality
+      - randomize
+      - refresh
+      - tile
+      - tiling_padding_horizontal
+      - tiling_padding_vertical
+      - user_panning_enabled
+      - user_zooming_enabled
+      - view_id
+      - zoom
+      - zooming_enabled
+      backend_only: false
+  select_permissions:
+  - role: api-user
+    permission:
+      columns:
+      - animate
+      - animation_duration
+      - created_at
+      - deleted_at
+      - edge_elasticity
+      - fit
+      - gravity
+      - gravity_compound
+      - gravity_range
+      - gravity_range_compound
+      - id
+      - ideal_edge_length
+      - initial_energy_on_incremental
+      - name
+      - nesting_factor
+      - node_dimensions_include_labels
+      - node_repulsion
+      - num_iter
+      - padding
+      - panning_enabled
+      - quality
+      - randomize
+      - refresh
+      - tile
+      - tiling_padding_horizontal
+      - tiling_padding_vertical
+      - updated_at
+      - user_panning_enabled
+      - user_zooming_enabled
+      - view_id
+      - zoom
+      - zooming_enabled
+      filter: {}
+  update_permissions:
+  - role: api-user
+    permission:
+      columns:
+      - animate
+      - animation_duration
+      - edge_elasticity
+      - fit
+      - gravity
+      - gravity_compound
+      - gravity_range
+      - gravity_range_compound
+      - ideal_edge_length
+      - initial_energy_on_incremental
+      - name
+      - nesting_factor
+      - node_dimensions_include_labels
+      - node_repulsion
+      - num_iter
+      - padding
+      - panning_enabled
+      - quality
+      - randomize
+      - refresh
+      - tile
+      - tiling_padding_horizontal
+      - tiling_padding_vertical
+      - user_panning_enabled
+      - user_zooming_enabled
+      - view_id
+      - zoom
+      - zooming_enabled
+      filter:
+        view:
+          owner_email:
+            _eq: X-Hasura-Remote-User
+      check: null
+- table:
+    schema: atlas
+    name: my_views
+  configuration:
+    custom_root_fields:
+      select_by_pk: MyViewsByID
+      select: MyViews
+      update: UpdateMyViews
+      update_by_pk: UpdateByIdMyViews
+    custom_column_names:
+      legend_edge_label: legendEdgeLabel
+      owner_email: ownerEmail
+      updated_at: updatedAt
+      deleted_at: deletedAt
+      legend_node_label: legendNodeLabel
+      created_at: createdAt
+      is_featured: isFeatured
+  object_relationships:
+  - name: layout
+    using:
+      manual_configuration:
+        remote_table:
+          schema: atlas
+          name: layouts
+        column_mapping:
+          id: view_id
+  - name: node
+    using:
+      manual_configuration:
+        remote_table:
+          schema: atlas
+          name: nodes
+        column_mapping:
+          id: view_id
+  array_relationships:
+  - name: data
+    using:
+      manual_configuration:
+        remote_table:
+          schema: atlas
+          name: data
+        column_mapping:
+          id: view_id
+  select_permissions:
+  - role: api-user
+    permission:
+      columns:
+      - id
+      - created_at
+      - updated_at
+      - deleted_at
+      - title
+      - owner_email
+      - description
+      - legend_node_label
+      - legend_edge_label
+      - is_featured
+      - image
+      filter:
+        _and:
+        - owner_email:
+            _eq: X-Hasura-Remote-User
+        - deleted_at:
+            _is_null: true
+  update_permissions:
+  - role: api-user
+    permission:
+      columns:
+      - deleted_at
+      - description
+      - image
+      - legend_edge_label
+      - legend_node_label
+      - title
+      filter:
+        _and:
+        - owner_email:
+            _eq: X-Hasura-Remote-User
+        - deleted_at:
+            _is_null: true
+      check: null
+- table:
+    schema: atlas
+    name: nodes
+  configuration:
+    custom_root_fields:
+      insert: InsertNodes
+      insert_one: InsertNodesOne
+      select_by_pk: NodesByID
+      select: Nodes
+    custom_column_names:
+      sizes_roots: sizesRoots
+      view_id: viewId
+      sizes_root_child: sizesRootChild
+      parent_label: parentLabel
+      parent_key: parentKey
+      updated_at: updatedAt
+      deleted_at: deletedAt
+      sizes_child_descendants: sizesChildDescendants
+      created_at: createdAt
+      font_size: fontSize
+  object_relationships:
+  - name: view
+    using:
+      foreign_key_constraint_on: view_id
+  insert_permissions:
+  - role: api-user
+    permission:
+      check: {}
+      columns:
+      - font_size
+      - id
+      - parent_key
+      - parent_label
+      - sizes_child_descendants
+      - sizes_root_child
+      - sizes_roots
+      - view_id
+      backend_only: false
+  select_permissions:
+  - role: api-user
+    permission:
+      columns:
+      - created_at
+      - deleted_at
+      - font_size
+      - id
+      - parent_key
+      - parent_label
+      - sizes_child_descendants
+      - sizes_root_child
+      - sizes_roots
+      - updated_at
+      - view_id
+      filter: {}
+  update_permissions:
+  - role: api-user
+    permission:
+      columns:
+      - font_size
+      - parent_key
+      - parent_label
+      - sizes_child_descendants
+      - sizes_root_child
+      - sizes_roots
+      filter:
+        view:
+          owner_email:
+            _eq: X-Hasura-Remote-User
+      check: null
+- table:
+    schema: atlas
+    name: text_result
+  select_permissions:
+  - role: api-user
+    permission:
+      columns:
+      - result
+      filter: {}
+- table:
+    schema: atlas
+    name: users
+  configuration:
+    custom_root_fields:
+      select_by_pk: UsersByEmail
+      select: Users
+    custom_column_names: {}
+  select_permissions:
+  - role: api-user
+    permission:
+      columns:
+      - email
+      - created_at
+      - updated_at
+      - deleted_at
+      - admin
+      filter: {}
+- table:
+    schema: atlas
+    name: views
+  configuration:
+    custom_root_fields:
+      insert_one: InserViewsOne
+      select_by_pk: ViewsByID
+      select: Views
+    custom_column_names:
+      legend_edge_label: legendEdgeLabel
+      owner_email: ownerEmail
+      updated_at: updatedAt
+      deleted_at: deletedAt
+      legend_node_label: legendNodeLabel
+      created_at: createdAt
+      is_featured: isFeatured
+  object_relationships:
+  - name: layout
+    using:
+      manual_configuration:
+        remote_table:
+          schema: atlas
+          name: layouts
+        column_mapping:
+          id: view_id
+  - name: node
+    using:
+      manual_configuration:
+        remote_table:
+          schema: atlas
+          name: nodes
+        column_mapping:
+          id: view_id
+  array_relationships:
+  - name: data
+    using:
+      foreign_key_constraint_on:
+        column: view_id
+        table:
+          schema: atlas
+          name: data
+  insert_permissions:
+  - role: api-user
+    permission:
+      check: {}
+      set:
+        owner_email: x-hasura-remote-user
+      columns:
+      - description
+      - id
+      - legend_edge_label
+      - legend_node_label
+      - title
+      backend_only: false
+  select_permissions:
+  - role: api-user
+    permission:
+      columns:
+      - created_at
+      - deleted_at
+      - description
+      - id
+      - image
+      - is_featured
+      - legend_edge_label
+      - legend_node_label
+      - owner_email
+      - title
+      - updated_at
+      filter:
+        deleted_at:
+          _is_null: true
