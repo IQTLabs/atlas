@@ -4,7 +4,7 @@ Atlas is a visualization tool for creating customizable, interactive graphs in a
 
 > Dash is an open source Python framework for building web applications. It is built on top of Flask (development web server), Plotly (JavaScript Graphing Library) and React (JavaScript UI Library). It enables you to build dashboards using pure Python.
 
-![](images/star_wars.png)
+![](images/cose-bilkent.svg)
 
 ## Developer Quickstart
 
