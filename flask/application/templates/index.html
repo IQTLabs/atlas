@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="box flex-row page-heading ">
+        Graphs
+    </section>
+
+    <section class="box grids grid-4 graphs-grid">
+        {% for view in featured_views %}
+            <div class="card flex card-featured">
+                <div class="card-item card-flex card-menu"></div>
+                <p class="card-item card-flex card-title">
+                    <a href="{{dash_url_base}}{{ view.id }}" class="header">{{ view.title }}</a>
+                </p>
+                <p class="card-item card-flex card-subtitle">{{ view.layout.name }}</p>
+                {% if view.image %}
+                    <div class="card-flex card-image">
+                        <a id="card-image-{{view.id}}" href="#" onclick="showCardInfo('{{view.id}}')">
+                            <img src={{ view.image }}>
+                        </a>
+                    </div>
+                    <p id="card-info-{{view.id}}" class="card-flex card-info card-info-hide" onclick="showCardImage('{{view.id}}')">
+                      {{ view.description }}
+                    </p>
+                {% else %}
+                    <p class="card-flex card-info">
+                      {{ view.description }}
+                    </p>
+                {% endif %}
+                <p class="card-item card-flex card-meta">
+                    author: {{ view.ownerEmail }}<br>
+                    updated {{ view.updatedAt|datetime }} ago
+                </p>
+            </div>
+        {% endfor %}
+        {% for view in views %}
+            <div class="card card-grid">
+                <div class="card-item card-flex card-menu">
+                    <i class="card-menu-btn fa fa-ellipsis-v" onclick="showMenuDropdown('{{view.id}}')"></i>
+                    <div id="card-menu-{{view.id}}" class="card-menu-dropdown">
+                        <a href="#" onclick="showDeleteModal('{{view.id}}')" id="confirm_delete{{view.id}}">Delete</a>
+                        <!-- <a href="#about">Submit for Feature Review</a>-->
+                    </div>
+                </div>
+                <p class="card-item card-flex card-title">
+                    <a href="{{dash_url_base}}{{ view.id }}" class="header">{{ view.title }}</a>
+                </p>
+                <p class="card-item card-flex card-subtitle">{{ view.layout.name }}</p>
+                <div class="card-item">
+                    {% if view.image %}
+                        <div class="card-flex card-image">
+                            <a id="card-image-{{view.id}}" href="#" onclick="showCardInfo('{{view.id}}')">
+                                <img src={{ view.image }}>
+                            </a>
+                        </div>
+                        <p id="card-info-{{view.id}}" class="card-flex card-info card-info-hide" onclick="showCardImage('{{view.id}}')">
+                            {{ view.description }}
+                        </p>
+                    {% else %}
+                        <p class="card-flex card-info">
+                            {{ view.description }}
+                        </p>
+                    {% endif %}
+                </div>
+                <p class="card-item card-flex card-meta">
+                    author: {{ view.ownerEmail }}<br>
+                    updated {{ view.updatedAt|datetime }} ago
+                </p>
+            </div>
+        {% endfor %}
+
+        <!-- MODAL -->
+        <div class="ui modal create_view">
+            <i class="close icon"></i>
+            <div class="header">
+              Create your Graph
+            </div>
+            <div class="image content">
+              <div class="ui medium image">
+                <img src="static/images/network-graph-300x300.png">
+              </div>
+              <div class="description">
+                <form method="POST" enctype="multipart/form-data" id="view_form"  method="post" action="{{ url_for('main.index') }}">
+                  {{ form.csrf_token }}
+
+                  <div class="ui form">
+                    <div class="field required">
+                      {{ form.title.label }}
+                      <div class="ui left input">
+                        {{ form.title }}
+                      </div>
+                      {% if form.title.errors %}
+                      <ul class="errors">
+                        {% for error in form.title.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                      </ul>
+                      {% endif %}
+                    </div>
+
+                    <div class="field required">
+                      {{ form.description.label }}
+                      <div class="ui left input">
+                        {{ form.description(rows='5',cols='100') }}
+                      </div>
+                      {% if form.description.errors %}
+                      <ul class="errors">
+                        {% for error in form.description.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                      </ul>
+                      {% endif %}
+                    </div>
+
+                    <h4 class="ui dividing header">Legend</h4>
+
+                    <div class="field required">
+                      {{ form.node_label.label }}
+                      <div class="ui left input">
+                        {{ form.node_label(size=20) }}
+                      </div>
+                      {% if form.node_label.errors %}
+                      <ul class="errors">
+                        {% for error in form.node_label.errors %}
+                        <li>{{ error }}</li>
+                        {% endfor %}
+                      </ul>
+                      {% endif %}
+                    </div>
+
+                    <div class="field required">
+                      {{ form.edge_label.label }}
+                      <div class="ui left input">
+                        {{ form.edge_label(size=20) }}
+                      </div>
+                      {% if form.edge_label.errors %}
+                        <ul class="errors">
+                          {% for error in form.edge_label.errors %}
+                          <li>{{ error }}</li>
+                          {% endfor %}
+                        </ul>
+                      {% endif %}
+                    </div>
+
+                    <div class="ui teal submit button input-file-container">
+                      {{ form.graph_data(class_="input-file", accept=".json") }}
+                      <label tabindex="0" for="graph_data" class="input-file-trigger">Select a JSON file...</label>
+                    </div>
+                    <p class="file-return"></p>
+                    <div id="graph_data_errors" class="errors">
+                      {% for error in form.graph_data.errors %}
+                        <p class="space"></p>
+                        <p class="ui red message">{{ error }}</p>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="actions">
+              {{ form.submit(form="view_form", id="submit_view_form") }}
+            </div>
+          </div>
+        <div class="ui modal confirm_delete">
+            <i class="close icon"></i>
+            <div class="header">
+                Are you sure?
+            </div>
+            <div class="actions">
+                <div class="center">
+                    <form id="delete_form" action="{{ url_for('main.index') }}" method="POST">
+                        {{ delete_view_form.csrf_token }}
+                        {{ delete_view_form.submit_delete(form="delete_form") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="ui modal about_atlas">
+            <i class="close icon"></i>
+            <div class="header">
+                Explore your data
+            </div>
+            <div class="content center modal-description">
+                Atlas helps you <strong>connect</strong> the dots on your data. Originally built as a summary of Labs research projects, this tool allows users to <strong>visualize</strong> and <strong>explore</strong> a wide variety of complex datasets.
+                Want to <strong>map out</strong> a startup ecosystem to see who's who in a high-growth segment of the marketplace? Looking to analyze patent citation networks to get a better sense of recent innovation <strong>patterns</strong>? Have a social network dataset consisting of <strong>relationships</strong> among customers, founders, investors, strategic partners, etc.? Some other set of <strong>connected</strong> entities that might be easier to describe visually? Atlas can help.
+            </div>
+        </div>
+        <!-- END MODAL -->
+    </section>
+{% endblock %}

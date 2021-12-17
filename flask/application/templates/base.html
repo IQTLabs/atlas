@@ -1,0 +1,206 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, initial-scale=1.0">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+      <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"
+      integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ="
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="static/css/style.css" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>{% block title %} {% endblock %}</title>
+  </head>
+  <body>
+    <main>
+        <section id="grid">
+            <header class="box container flex">
+                <div  id="header-grid">
+                    <div class="menu container flex">
+                        <a href="{{ url_for('main.index') }}" class="mb-20">
+                            <img src="static/images/Atlas_Logo-color.svg" width="80px">
+                        </a>
+                    </div>
+                    <div class="menu container flex flex-start">
+                        <a href="{{ url_for('main.index') }}" class="mb-20"><i class="fas fa-home"></i></a>
+                        <a href="#" id="about_atlas" class="ui mb-20"  data-tooltip="About Atlas" data-position="right center" data-inverted="">
+                            <i class="fas fa-info"></i>
+                        </a>
+                        <a href="#" id="create_view" data-tooltip="Add a Graph" class="ui mb-20"  data-position="right center" data-inverted="">
+                            <i class="fas fa-plus"></i>
+                        </a>
+
+                    </div>
+                    <div class="menu container flex flex-end">
+                        <a href="#" data-tooltip="Atlas Open Source Code" class="ui mb-20" data-position="right center" data-inverted=""><i class="fab fa-gitlab"></i></a>
+                    </div>
+                </div>
+            </header>
+
+            <div class="box container flex-row flex-end">
+                <p class="welcome">Hello, {{ user.email }}!</p>
+            </div>
+
+            {% block content %} {% endblock %}
+
+            <footer class="box container flex">
+                <ul>
+                    <li><a href="{{ url_for('main.terms_of_use') }}">Terms of Use</a></li>
+                    <li>&#183;</li>
+                    <li><a href="{{ url_for('main.privacy_policy') }}">Privacy Policy</a></li>
+                    <li>&#183;</li>
+                    <li>&#169; 2021 &#183; In-Q-Tel, Inc.</li>
+                </ul>
+            </footer>
+        </section>
+        {% if config['FLASK_ENV'] == 'public' %}
+            <div id="notification">
+                This info is deleted every 24 hrs. IQT Labs is not accessing or storing any uploaded data.
+            </div>
+        {% endif %}
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    {% if request.path == url_for('main.index') %}
+        <script>
+            $(function(){
+                $("#about_atlas").click(function(){
+                    $(".about_atlas").modal('show');
+                });
+                $(".about_atlas").modal({
+                    closable: true
+                });
+            });
+
+            $(function(){
+                $("#create_view").click(function(){
+                    $(".create_view").modal('show');
+                });
+                $(".create_view").modal({
+                    closable: true
+                });
+            });
+
+            /* Trigger flash modal */
+            let formErrors = {% if form.graph_data.errors %}true{% else %}false{% endif %};
+            $(document).ready(function() {
+                if (formErrors) {
+                    $('.create_view').modal('show');
+                }
+            });
+
+            document.querySelector("html").classList.add('js');
+
+            let fileInput  = document.querySelector( ".input-file" );
+            let button     = document.querySelector( ".input-file-trigger" );
+            let the_return = document.querySelector(".file-return");
+
+            button.addEventListener( "keydown", function( event ) {
+                if ( event.keyCode == 13 || event.keyCode == 32 ) {
+                    fileInput.focus();
+                }
+            });
+            button.addEventListener( "click", function( event ) {
+                fileInput.focus();
+                return false;
+            });
+            fileInput.addEventListener( "change", function( event ) {
+            the_return.innerHTML = this.files[0]['name'];
+
+            var error = false;
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                try {
+                    $.parseJSON(event.target.result);
+                    document.getElementById("graph_data_errors").innerHTML = "";
+                    document.getElementById("submit_view_form").disabled = false;
+                }
+                catch (e) {
+                    document.getElementById("graph_data_errors").innerHTML = "<p class='ui red message'>" + e.name + ": " + e.message + "<br>Resolve and try again.</p>";
+                    document.getElementById("submit_view_form").disabled = true;
+                    error = true;
+                }
+            }
+
+            try {
+                let size = document.getElementById("graph_data").files[0].size;
+                if (size > 2097152) {
+                    throw "too large"
+                }
+            }
+            catch (e) {
+                document.getElementById("graph_data_errors").innerHTML = "<p class='ui red message'>File size must be less than 2MB</p>";
+                document.getElementById("submit_view_form").disabled = true;
+                error = true;
+            }
+            if (!error) {
+                reader.readAsText(this.files[0]);
+            }
+            });
+
+            $('.my_views.cards .image').dimmer({
+                on: 'hover'
+            });
+
+
+            function showMenuDropdown(viewId) {
+                let cardElem = "card-menu-" + viewId
+                document.getElementById(cardElem).classList.toggle("show");
+            }
+
+            function showCardInfo(viewId) {
+                let cardElem = "card-info-" + viewId
+                document.getElementById(cardElem).style.display = "block";
+                let cardImageElem = "card-image-" + viewId
+                document.getElementById(cardImageElem).style.display = "none";
+            }
+
+            function showCardImage(viewId) {
+                let cardElem = "card-image-" + viewId
+                document.getElementById(cardElem).style.display = "block";
+                let cardInfoElem = "card-info-" + viewId
+                document.getElementById(cardInfoElem).style.display = "none";
+            }
+
+            function showDeleteModal(viewId) {
+                let modalElem = ".confirm_delete"
+                $(modalElem).modal('show');
+                $(modalElem).modal({
+                    closable: true
+                });
+                var input = document.createElement("input");
+                input.setAttribute("type", "hidden");
+                input.setAttribute("name", "view_id");
+                input.setAttribute("value", viewId);
+
+//append to form element that you want .
+                document.getElementById("delete_form").appendChild(input);
+                // document.getElementById(viewId).value = viewId;
+
+            }
+
+            // Close the dropdown if the user clicks outside of it
+            window.onclick = function(event) {
+                if (!event.target.matches('.card-menu-btn')) {
+                    var dropdowns = document.getElementsByClassName("card-menu-dropdown");
+                    var i;
+                    for (i = 0; i < dropdowns.length; i++) {
+                        var openDropdown = dropdowns[i];
+                        if (openDropdown.classList.contains('show')) {
+                            openDropdown.classList.remove('show');
+                        }
+                    }
+                }
+            }
+
+
+        </script>
+    {% endif %}
+  </body>
+</html>

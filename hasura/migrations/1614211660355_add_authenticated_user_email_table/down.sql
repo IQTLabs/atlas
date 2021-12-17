@@ -1,0 +1,1 @@
+DROP TABLE atlas.authenticated_user_email;

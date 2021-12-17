@@ -1,0 +1,39 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  REPOSITORY_URL: 075706292015.dkr.ecr.us-east-1.amazonaws.com/atlas
+  AWS_DEFAULT_REGION: us-east-1
+  CI_AWS_ECS_CLUSTER: atlas
+
+stages:
+  - test
+  - build
+
+include:
+- template: Security/SAST.gitlab-ci.yml
+- template: Security/Dependency-Scanning.gitlab-ci.yml
+gemnasium-python-dependency_scanning:
+  image: registry.gitlab.com/gitlab-org/security-products/analyzers/gemnasium-python:2-python-3.9
+
+matrix:
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+  script:
+    - apk add --no-cache curl jq aws-cli
+    - $(aws ecr get-login --no-include-email --region "${AWS_DEFAULT_REGION}")
+    - IMAGE_TAG="$(echo $CI_COMMIT_SHA | head -c 8)"
+    - echo "Building image..."
+    - docker build -t $REPOSITORY_URL:$SERVICE-latest $SERVICE
+    - echo "Tagging image..."
+    - docker tag $REPOSITORY_URL:$SERVICE-latest $REPOSITORY_URL:$SERVICE-$IMAGE_TAG
+    - echo "Pushing image..."
+    - docker push $REPOSITORY_URL:$SERVICE-latest
+    - docker push $REPOSITORY_URL:$SERVICE-$IMAGE_TAG
+    - aws ecs update-service --cluster $CI_AWS_ECS_CLUSTER --service $SERVICE --force-new-deployment
+  parallel:
+    matrix:
+      - SERVICE: [hasura, flask]
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^release\/[0-9\.]+$/'
+    - if: '$CI_COMMIT_BRANCH == "main"'
