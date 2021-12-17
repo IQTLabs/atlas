@@ -51,6 +51,6 @@ scipy==1.6.1
 six==1.15.0
 typing-extensions==3.7.4.3
 urllib3==1.26.3
-websockets==8.1
+websockets==9.1
 yarl==1.6.3
 Flask_Babel==2.0.0
