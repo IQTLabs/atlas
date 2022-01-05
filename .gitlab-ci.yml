@@ -7,6 +7,8 @@ variables:
 stages:
   - test
   - build
+  - bidirectional-sync
+  - auto-merge-request
 
 include:
 - template: Security/SAST.gitlab-ci.yml
@@ -37,3 +39,56 @@ matrix:
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^release\/[0-9\.]+$/'
     - if: '$CI_COMMIT_BRANCH == "main"'
+
+public-main-manual-push:
+  stage: bidirectional-sync
+  extends: .load_sshkeys
+  script:
+    - apk update && apk add git && apk add openssh-client
+    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    - echo "$SSH_OSS_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - git config remote.open-source.url >&- || git remote add open-source $SSH_OPEN_SOURCE_URL
+    - git fetch origin public-main
+    - git checkout public-main
+    - git push open-source public-main:main
+    - git checkout -b development
+    - git branch -D public-main
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "public-main"'
+      when: manual
+      allow_failure: true
+
+open-source-main-auto-fetch:
+  stage: bidirectional-sync
+  extends: .load_sshkeys
+  script:
+    - apk update && apk add git && apk add openssh-client
+    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    - echo "$SSH_INTERNAL_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - echo "$SSH_OSS_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - git remote rm origin
+    - git config remote.open-source.url >&- || git remote add open-source $SSH_OPEN_SOURCE_URL
+    - git remote add origin $SSH_INTERNAL_URL
+    - git fetch origin public-main
+    - git checkout public-main
+    - git fetch open-source main
+    - git merge open-source/main
+    - git push origin public-main
+    - git fetch origin $CI_COMMIT_REF_NAME
+    - git checkout $CI_COMMIT_REF_NAME
+    - git branch -D public-main
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+      when: never
+    - if: '$CI_COMMIT_REF_PROTECTED == "false" && $CI_COMMIT_BRANCH != "public-main" && $CI_COMMIT_BRANCH != "main"'
+
+public-main-auto-merge-request:
+  # this job requires a personal access token with api scope to POST to Gitlab API
+  # this personal access token belongs to the atlas repository
+  before_script:
+    - apk update && apk add curl
+  stage: auto-merge-request
+  script:
+    - ./automerge-request.sh
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "public-main" || $CI_COMMIT_BRANCH == "main"'
