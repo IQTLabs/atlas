@@ -1,6 +1,6 @@
 #!/bin/sh
 # creates MR from `main` to `public-main` when `main` is updated
-# creates MR from `public-main` to `development` when `public-main` is updated
+# creates MR from `public-main` to `main` when `public-main` is updated
 
 if [ $CI_COMMIT_REF_NAME == "main" ]; then
   TARGET_BRANCH="public-main"
@@ -10,6 +10,7 @@ fi
 
 TITLE="${CI_COMMIT_REF_NAME} to ${TARGET_BRANCH} SYNC"
 
+echo "${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/"
 # Get all open merge requests and check if one exists for source branch
 LISTMR=`curl -L --silent "${CI_SERVER_HOST}/api/v4/projects/${CI_PROJECT_ID}/merge_requests?state=opened" --header "PRIVATE-TOKEN:${PERSONAL_ACCESS_TOKEN}"`;
 COUNTBRANCHES=`echo ${LISTMR} | grep -o "\"source_branch\":\"${CI_COMMIT_REF_NAME}\"" | wc -l`;
