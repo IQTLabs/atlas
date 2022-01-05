@@ -12,10 +12,11 @@ stages:
 
 include:
   - project: 'netops/helpers'
-    ref: master
+    ref: main
     file: '/load_sshkeys.yml'
-- template: Security/SAST.gitlab-ci.yml
-- template: Security/Dependency-Scanning.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Dependency-Scanning.gitlab-ci.yml
+
 gemnasium-python-dependency_scanning:
   image: registry.gitlab.com/gitlab-org/security-products/analyzers/gemnasium-python:2-python-3.9
 
