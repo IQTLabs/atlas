@@ -11,6 +11,9 @@ stages:
   - auto-merge-request
 
 include:
+  - project: 'netops/helpers'
+    ref: master
+    file: '/load_sshkeys.yml'
 - template: Security/SAST.gitlab-ci.yml
 - template: Security/Dependency-Scanning.gitlab-ci.yml
 gemnasium-python-dependency_scanning:
