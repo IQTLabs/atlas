@@ -49,7 +49,7 @@ public-main-manual-push:
   extends: .load_sshkeys
   script:
     - apk update && apk add git && apk add openssh-client
-    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    - ssh-keyscan github.com >> ~/.ssh/known_hosts
     - echo "$SSH_OSS_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - git config remote.open-source.url >&- || git remote add open-source $SSH_OPEN_SOURCE_URL
     - git fetch origin public-main
@@ -67,12 +67,13 @@ open-source-main-auto-fetch:
   extends: .load_sshkeys
   script:
     - apk update && apk add git && apk add openssh-client
-    - ssh-keyscan gitlab.com >> ~/.ssh/known_hosts
+    - ssh-keyscan github.com >> ~/.ssh/known_hosts
     - echo "$SSH_INTERNAL_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - echo "$SSH_OSS_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - git remote rm origin
     - git config remote.open-source.url >&- || git remote add open-source $SSH_OPEN_SOURCE_URL
     - git remote add origin $SSH_INTERNAL_URL
+    - git remote -v
     - git fetch origin public-main
     - git checkout public-main
     - git fetch open-source main
@@ -96,3 +97,4 @@ public-main-auto-merge-request:
     - ./automerge-request.sh
   rules:
     - if: '$CI_COMMIT_BRANCH == "public-main" || $CI_COMMIT_BRANCH == "main"'
+
