@@ -14,7 +14,8 @@ import secrets
 import json
 
 server_bp = Blueprint(
-    'main', __name__
+    'main', __name__,
+    static_folder='static'
 )
 
 
@@ -22,11 +23,6 @@ server_bp = Blueprint(
 @server_bp.before_request
 def generate_nonce(length=8):
     g.nonce = secrets.token_urlsafe()
-
-
-@server_bp.route('/atlas', methods=['GET', 'POST'])
-def public_site():
-    return index()
 
 
 @server_bp.route('/terms_of_use', methods=['GET'])

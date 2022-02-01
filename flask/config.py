@@ -13,6 +13,11 @@ class BaseConfig:
     CLIENT_HASURA_GRAPHQL_API = environ['CLIENT_HASURA_GRAPHQL_API']
     UPLOAD_EXTENSIONS = ['.json']
     DASH_URL_BASE = 'dash/dash_app_1/'
+    if environ['FLASK_ENV'] == 'public':
+        SUBDIRECTORY = 'atlas'
+        DASH_URL_BASE = 'atlas/' + DASH_URL_BASE
+    else:
+        SUBDIRECTORY = ''
     SECRET_KEY = environ['SECRET_KEY']
     # Set APPLICATION_ROOT when deploying Flask app to a subdirectory
     APPLICATION_ROOT = environ.get('APPLICATION_ROOT', '/')
