@@ -10,7 +10,7 @@ import visdcc
 from application.dashapp.styles import styles
 from application.gql import get_hasura_connection, get_hasura_connection_with_params
 from application.queries import getViewDetailsByID, getAuthenticatedUser
-from flask import request
+from flask import request, current_app
 from flask.helpers import get_root_path
 
 # Load extra layouts
@@ -58,7 +58,7 @@ def render_layout():
         config = {
             "logo": {
                 "file": "assets/images/Atlas_Logo_horizontal_full-color.svg",
-                "link": request.url_root,
+                "link": request.url_root + current_app.config['SUBDIRECTORY'],
                 "text": "IQT Labs"
             },
             "legend": {

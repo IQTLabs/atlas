@@ -29,7 +29,5 @@ def register_dashapps(app):
 
 def register_blueprints(server):
     from .routes import server_bp
-    from .dashapp.routes import dashapp_bp
+    server.register_blueprint(server_bp, url_prefix='/' + server.config['SUBDIRECTORY'])
 
-    server.register_blueprint(server_bp)
-    server.register_blueprint(dashapp_bp)

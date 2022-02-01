@@ -17,7 +17,7 @@ def add_dash(server):
         server=server,
         external_stylesheets=external_stylesheets,
         routes_pathname_prefix='/' + current_app.config.get('DASH_URL_BASE'),
-        requests_pathname_prefix=(current_app.config.get('APPLICATION_ROOT') + '/dash/dash_app_1/').replace('//', '/'),
+        requests_pathname_prefix=(current_app.config.get('APPLICATION_ROOT') + '/' + current_app.config.get('DASH_URL_BASE')).replace('//', '/'),
         assets_folder=get_root_path(__name__) + '/assets/',
         meta_tags=[meta_viewport],
         suppress_callback_exceptions=True
