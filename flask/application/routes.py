@@ -19,11 +19,17 @@ server_bp = Blueprint(
 )
 
 
-
 @server_bp.before_request
 def generate_nonce(length=8):
     g.nonce = secrets.token_urlsafe()
 
+
+@server_bp.after_request
+def add_security_headers(resp):
+    if current_app.config.get('FLASK_ENV') == 'public':
+        resp.headers['Content-Security-Policy'] = f"default-src 'none'; script-src 'self' 'nonce-{g.nonce}' http://www.googletagmanager.com https://code.jquery.com; connect-src 'self' https://www.google-analytics.com; img-src 'self' https://assets.iqt.org; base-uri 'self'; form-action 'self'; font-src 'self'; style-src 'self' 'nonce-{g.nonce}'"
+        resp.headers['Strict-Transport-Security'] = 'max-age=63072000; includeSubDomains; preload'
+    return resp
 
 @server_bp.route('/terms_of_use', methods=['GET'])
 def terms_of_use():

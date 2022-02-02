@@ -1,0 +1,9 @@
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ config['GA_MEASUREMENT_ID'] }}"></script>
+<script nonce='{{ g.nonce }}'>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){window.dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', '{{ config['GA_MEASUREMENT_ID'] }}');
+</script>
+

@@ -22,3 +22,4 @@ class BaseConfig:
     # Set APPLICATION_ROOT when deploying Flask app to a subdirectory
     APPLICATION_ROOT = environ.get('APPLICATION_ROOT', '/')
     MAX_CONTENT_LENGTH = 2 * 1024 * 1024
+    GA_MEASUREMENT_ID=environ['GA_MEASUREMENT_ID']
