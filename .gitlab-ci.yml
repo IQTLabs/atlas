@@ -7,6 +7,7 @@ variables:
 stages:
   - test
   - build
+  - reset-db
   - bidirectional-sync
   - auto-merge-request
 
@@ -43,6 +44,26 @@ matrix:
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^release\/[0-9\.]+$/'
     - if: '$CI_COMMIT_BRANCH == "main"'
+
+aws-public-db-snapshot-reset:
+  stage: reset-db
+  environment: db_restore
+  image:
+    name: amazon/aws-cli
+    entrypoint: [""]
+  variables:
+    RDS_INSTANCE: "RDS_INSTANCE_PUBLIC"
+    SNAPSHOT_NAME: "atlas_baseline_snapshot"
+  script:
+    - aws rds delete-db-instance \
+      --db-instance-identifier ${RDS_INSTANCE} \
+      --delete-automated-backups
+    - aws rds restore-db-instance-from-db-snapshot \
+      --db-instance-identifier ${RDS_INSTANCE} \
+      --db-snapshot-identifier ${SNAPSHOT_NAME} \
+      --db-instance-class db.t3.small`
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "production" && $CI_PIPELINE_SOURCE == "schedule"'
 
 public-main-manual-push:
   stage: bidirectional-sync
