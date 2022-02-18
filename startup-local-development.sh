@@ -24,4 +24,4 @@ cd ..
 cd flask
 export PYTHONPATH=$PYTHONPATH:"$(pwd)"
 pip3 install -r requirements.txt
-#flask run --port 8050
+flask run --port 8050
