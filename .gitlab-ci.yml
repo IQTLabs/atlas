@@ -63,7 +63,7 @@ aws-public-db-snapshot-reset:
       --db-snapshot-identifier ${SNAPSHOT_NAME} \
       --db-instance-class db.t3.small`
   rules:
-    - if: '$CI_COMMIT_BRANCH == "production" && $CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
 
 public-main-manual-push:
   stage: bidirectional-sync
