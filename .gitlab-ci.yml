@@ -76,6 +76,7 @@ public-main-manual-push:
     - git fetch origin public-main
     - git checkout public-main
     - git push open-source public-main:main
+    - git branch -D development
     - git checkout -b development
     - git branch -D public-main
   rules:
