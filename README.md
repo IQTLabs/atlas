@@ -14,7 +14,11 @@ Atlas is a visualization tool for creating customizable, interactive graphs in a
 
 ### ENV Variables
 
-Copy the .env.example to .env in the root directory.
+Copy the .env-example to .env in the root directory.
+```console
+cp .env-example .env
+```
+Update .env accordingly.
 
 ### Run with Docker
 
