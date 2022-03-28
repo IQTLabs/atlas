@@ -15,3 +15,5 @@ __pycache__/
 flask/.run/
 
 flask/application/dashapp/assets/screenshots/
+
+semgrep.out
