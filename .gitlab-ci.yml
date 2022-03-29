@@ -63,7 +63,7 @@ aws-public-db-snapshot-reset:
       --db-snapshot-identifier ${SNAPSHOT_NAME} \
       --db-instance-class db.t3.small`
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_COMMIT_BRANCH == "public" && $CI_PIPELINE_SOURCE == "schedule"'
 
 public-main-manual-push:
   stage: bidirectional-sync
@@ -105,9 +105,7 @@ open-source-main-auto-fetch:
     - git checkout $CI_COMMIT_REF_NAME
     - git branch -D public-main
   rules:
-    - if: $CI_MERGE_REQUEST_ID
-      when: never
-    - if: '$CI_COMMIT_REF_PROTECTED == "false" && $CI_COMMIT_BRANCH != "public-main" && $CI_COMMIT_BRANCH != "main"'
+    - if: '$CI_PIPELINE_SOURCE == "schedule"'
 
 public-main-auto-merge-request:
   # this job requires a personal access token with api scope to POST to Gitlab API
