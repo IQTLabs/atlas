@@ -1,1 +1,2 @@
 flask/env/lib/*
+flask/application/templates/googleanalytics.html

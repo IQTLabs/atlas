@@ -140,6 +140,7 @@ def index():
                         }
                         asyncio.run(get_hasura_connection_with_params(updateDataById, params))
 
+                        # nosemgrep:github.workflows.config.open-redirect
                         return redirect(request.url_root + current_app.config.get('DASH_URL_BASE') + view['id'])
     return render_template('index.html', title='Home', views=views, featured_views=featured_views, form=form,
                            delete_view_form=delete_view_form, dash_url_base=current_app.config.get('DASH_URL_BASE'))
