@@ -18,7 +18,7 @@ fuzzywuzzy==0.18.0
 dash_bootstrap_components==0.13.1
 python-dotenv==0.19.2
 gql==3.0.0a5
-aiohttp==3.7.3
+aiohttp==3.7.4
 
 async-timeout==3.0.1
 attrs==20.3.0
