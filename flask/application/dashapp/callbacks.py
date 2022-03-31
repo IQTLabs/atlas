@@ -15,6 +15,7 @@ from flask import current_app
 
 
 def register_callbacks(dashapp):
+    # nosemgrep:github.workflows.config.useless-inner-function
     @dashapp.callback(
         Output('save-graph-image', 'run'),
         [
@@ -75,6 +76,7 @@ def register_callbacks(dashapp):
                            current_app.config.get('CLIENT_HASURA_GRAPHQL_API'))
 
     # Save image if user is graph owner
+    # nosemgrep:github.workflows.config.useless-inner-function
     @dashapp.callback(
         Output("cytoscape", "generateImage"),
         [
@@ -105,6 +107,7 @@ def register_callbacks(dashapp):
         if trigger == 'dropdown-image-type':
             raise PreventUpdate
 
+    # nosemgrep:github.workflows.config.useless-inner-function
     @dashapp.callback(
         Output('cytoscape', 'elements'),
         [
@@ -144,6 +147,7 @@ def register_callbacks(dashapp):
             if nodeData:
                 return get_neighbor_elements(nodeData, elements_ls, node_dictionary)
 
+    # nosemgrep:github.workflows.config.useless-inner-function
     @dashapp.callback(
         Output('search-results', 'children'),
         [
@@ -196,6 +200,7 @@ def register_callbacks(dashapp):
             return ''
 
     ## hash generated when viewing dashapp outside of flask
+    # nosemgrep:github.workflows.config.useless-inner-function
     @dashapp.callback(
         Output('add-hash-from-search', 'run'),
         [
@@ -247,6 +252,7 @@ def register_callbacks(dashapp):
             '''.format(url_href)
 
     # Admin button will only show up for graph owner
+    # nosemgrep:github.workflows.config.useless-inner-function
     @dashapp.callback(
         Output('adminpanel', 'style'),
         [
@@ -273,6 +279,7 @@ def register_callbacks(dashapp):
         return styles['#adminpanel']
 
     # Save preset button will only show up for graph owner
+    # nosemgrep:github.workflows.config.useless-inner-function
     @dashapp.callback(
         Output('save-element-positions', 'run'),
         [
@@ -358,6 +365,7 @@ def register_callbacks(dashapp):
                            current_app.config.get('CLIENT_HASURA_GRAPHQL_API'),
                            layout_name)
 
+    # nosemgrep
     @dashapp.callback(
         Output('cytoscape', 'layout'),
         [
@@ -370,6 +378,7 @@ def register_callbacks(dashapp):
         return layout_data
 
     # Save preset button will only show up for graph owner
+    # nosemgrep:github.workflows.config.useless-inner-function
     @dashapp.callback(
         Output('save-layout-button', 'style'),
         [
@@ -385,6 +394,7 @@ def register_callbacks(dashapp):
                 styles['#save-layout-button']['visibility'] = 'hidden'
             return styles['#save-layout-button']
 
+    # nosemgrep:github.workflows.config.useless-inner-function
     @dashapp.callback(
         Output('attributepane', 'style'),
         [
@@ -430,6 +440,7 @@ def register_callbacks(dashapp):
                 styles['#attributepane']['visibility'] = 'hidden'
                 return styles['#attributepane']
 
+    # nosemgrep:github.workflows.config.useless-inner-function
     @dashapp.callback(
         Output('nodeattributes', 'children'),
         [

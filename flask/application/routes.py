@@ -9,6 +9,7 @@ from application.gql import get_hasura_connection, get_hasura_connection_with_pa
 from application.queries import getAuthenticatedUser, getMyViews, getFeaturedViews, insertView, softDeleteMyView, \
     insertLayout, insertDataOne, insertNode, updateDataById
 from flask import g, Blueprint, render_template, request, redirect, abort, current_app
+from urllib.parse import urlparse
 from werkzeug.utils import secure_filename
 import secrets
 import json
@@ -140,7 +141,8 @@ def index():
                         }
                         asyncio.run(get_hasura_connection_with_params(updateDataById, params))
 
-                        return redirect(request.url_root + current_app.config.get('DASH_URL_BASE') + view['id'])
+                        dash_app_url = urlparse(request.url_root + current_app.config.get('DASH_URL_BASE') + view['id'])
+                        return redirect(dash_app_url)
     return render_template('index.html', title='Home', views=views, featured_views=featured_views, form=form,
                            delete_view_form=delete_view_form, dash_url_base=current_app.config.get('DASH_URL_BASE'))
 
