@@ -1,5 +1,5 @@
 random2==1.0.1
-numpy==1.21.0
+numpy==1.22.0
 Babel==2.9.0
 Jinja2==2.11.3
 requests==2.25.1
